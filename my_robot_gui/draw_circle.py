@@ -4,8 +4,9 @@ from rclpy.node import Node
 from geometry_msgs.msg import Twist
 
 class DrawCircleNode(Node):
-    def __init__(self):
+    def __init__(self, gui=None):
         super().__init__("draw_circle")
+        self.gui = gui
         self.vel_pub_ = self.create_publisher(
             Twist, "/turtle1/cmd_vel", 10
         )
@@ -16,6 +17,11 @@ class DrawCircleNode(Node):
         msg = Twist()
         msg.linear.x = 2.0
         msg.angular.z = 1.0
+        if self.gui is not None:
+            if self.gui.cw:
+                msg.angular.z = -1.0
+            else:
+                msg.angular.z = 1.0
         self.vel_pub_.publish(msg)
 
 def main(args=None):
